@@ -1,0 +1,88 @@
+﻿@using Task4.Controllers
+@model Task4.Models.ViewModels.UserVM
+
+<h1 class="mb-4">
+    Users
+</h1>
+
+<form asp-controller="Home" asp-action="UserActions" asp-antiforgery="true" method="post">
+    <div class="d-flex mb-4">
+        <div style="margin-right: 10px;">
+            <input asp-for="@Model.Block" type="submit" class="btn btn-danger" value="Block" />
+        </div>
+        <div style="margin-right: 10px;">
+            <input asp-for="@Model.UnBlock" type="submit" class="btn btn-success" value="UnBlock" />
+        </div>
+        <div style="margin-right: 10px;">
+            <input asp-for="@Model.Delete" type="submit" class="btn btn-danger" value="Delete" />
+        </div>
+    </div>
+
+    <div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        <input class="form-check-input" type="checkbox" id="checkAll" />
+                    </th>
+                    <th class="text-center">#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Registration Date</th>
+                    <th>Last Login Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr class="@(user == Model.CurrentUser ? "bg-primary text-white" : "")">
+                        <td class="text-center">
+                            <input class="checkbox form-check-input" type="checkbox" name="ids" value="@user.Id" />
+                        </td>
+                        <td class="text-center">@user.Id</td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@(user.RegistrationDate?.ToString("dd-MM-yyyy") ?? "0-0-0")</td>
+                        <td>@(user.LastLoginTime?.ToString("HH:mm:ss") ?? "00:00")</td>
+                        <td class="text-white">@(user.Status == (int)UserStatus.Blocked ? "Blocked" : "Default")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>
+
+@section scripts {
+    <script>
+        const statuses = document.querySelectorAll('td')
+        if (statuses) {
+            statuses.forEach(s => {
+                if (s.innerText === 'Default') {
+                    s.classList.add('bg-success')
+                } else if (s.innerText === 'Blocked') {
+                    s.classList.add('bg-danger')
+                }
+            })
+        }
+
+        const checkAll = document.getElementById('checkAll')
+        const checkboxes = document.querySelectorAll('.checkbox')
+        let arr = []
+        if (checkAll && checkboxes) {
+            checkAll.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    checkboxes.forEach(ch => {
+                        ch.checked = true
+                        arr.push(ch.value)
+                    })
+                } else {
+                    checkboxes.forEach(ch => {
+                        ch.checked = false
+                    })
+                    arr = []
+                }
+            })
+        }
+    </script>
+}

@@ -1,0 +1,26 @@
+﻿@model Task4.Models.ViewModels.LoginVM
+
+<h2 class="mb-3">Log In</h2>
+
+<div class="mb-3">
+    <a asp-action="Register" asp-controller="Home">Registration</a>
+</div>
+
+<form asp-action="Login" asp-controller="Home" asp-antiforgery="true">
+    <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="form-group mb-3">
+            <label asp-for="Email">Email</label>
+            <input class="form-control" type="text" asp-for="Email" />
+            <span class="text-danger" asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="Password">Password</label>
+            <input class="form-control" asp-for="Password" />
+            <span class="text-danger" asp-validation-for="Password"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Log In" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</form>
