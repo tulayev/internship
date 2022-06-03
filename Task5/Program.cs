@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using System;
 using Task5.Data;
 using Task5.Extensions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Task5
 {
@@ -17,7 +17,7 @@ namespace Task5
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    var port = Environment.GetEnvironmentVariable("PORT");
+                    string port = Environment.GetEnvironmentVariable("PORT");
                     webBuilder.UseUrls($"http://+:{port}");
                     webBuilder.UseStartup<Startup>();
                 });
