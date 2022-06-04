@@ -25,6 +25,7 @@
                     asp-for="@Model.Message.Title" 
                     type="text" 
                     class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                    required
                 />
                 <span asp-validation-for="@Model.Message.Title" class="block text-red-600 text-sm"></span>
                 <label asp-for="@Model.Message.Body" class="block text-gray-700 font-bold mb-2"></label>
@@ -44,13 +45,7 @@
 
 <div class="w-1/2 mx-auto pt-6">
     <h3 class="mb-6 text-2xl font-bold text-center">Messages</h3>
-    @foreach (var message in Model.User.MessageUsers)
-    {
-        <div class="mb-4">
-            <h4 class="text-lg font-medium text-center">@message.Message?.Title</h4>
-            <p>@message.Message?.Body</p>
-        </div>
-    }
+    <div id="messageBox"></div>
 </div>
 
 @section Scripts {
@@ -103,6 +98,35 @@
     }
 
     search.addEventListener('input', () => searchNames(search.value))
+
+    const messageBox = document.getElementById('messageBox')
+
+    setInterval(async () => {
+        const urlString = window.location.href
+        const url = new URL(urlString)
+        const param = url.searchParams.get('name')
+
+        try{
+            const res = await fetch(`/home/messages?name=${param}`)
+            const user = await res.json()  
+            const data = user.data.messageUsers
+
+            data.sort((a, b) => b.id - a.id)
+
+            messageBox.innerHTML = ''
+            
+            data.map(d => {
+                messageBox.innerHTML += `
+                <div class="mb-4">
+                    <h4 class="text-lg font-medium text-center">${d.message.title}</h4>
+                    <p>${d.message.body}</p>
+                </div>
+                `
+            })
+        } catch(e) {
+            console.log(e.message)
+        }
+    }, 5000)
 
 </script>
 

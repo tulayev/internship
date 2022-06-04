@@ -95,6 +95,16 @@ namespace Task5.Controllers
         #region API
         [HttpGet]
         public IActionResult Users() => Json(new { data = _db.Users.ToList() });
+        [HttpGet]
+        public IActionResult Messages(string name) 
+        {
+            var user = _db.Users.
+                Include(u => u.MessageUsers).
+                ThenInclude(mu => mu.Message).
+                FirstOrDefault(u => u.Name == name);
+
+            return Json(new { data = user });
+        }
         #endregion
     }
 }
