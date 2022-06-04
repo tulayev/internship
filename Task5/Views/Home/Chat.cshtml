@@ -1,11 +1,12 @@
 ﻿@model SendVM
 
 <div class="mt-4">
-    <form asp-action="Send" asp-controller="Home" method="post">
+    <form asp-action="Chat" asp-controller="Home" method="post">
         <input asp-for="@Model.User.Id" type="hidden" />
+        <input asp-for="@Model.User.Name" type="hidden" />
         <input asp-for="@Model.Message.From" value="@Model.User.Name" type="hidden" />
         <div class="w-1/2 mx-auto">
-            <h2 class="text-4xl mb-4">Hello, <b>@Model.User.Name!</b></h2>
+            <h2 class="text-4xl mb-4">Hi, <b>@Model.User.Name!</b></h2>
             <div class="mb-4">
                 <div>
                     <div id="names" class="flex flex-wrap mb-2"></div>
@@ -13,7 +14,7 @@
                     <input 
                         type="text" 
                         id="search" 
-                        class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                        class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                 </div>
                 <div id="matchList"></div>
@@ -26,21 +27,11 @@
                     class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                 />
                 <span asp-validation-for="@Model.Message.Title" class="block text-red-600 text-sm"></span>
-            </div>
-            <div class="row">
-                <div class="col-6 m-auto">
-                    @foreach (var message in Model.User.MessageUsers)
-                    {
-                        <div class="mb-2">
-                            <div>
-                                <h5>@message.Message?.Title</h5>
-                            </div>
-                            <div>
-                                <div>@message.Message?.Body</div>
-                            </div>
-                        </div>
-                    }
-                </div>
+                <label asp-for="@Model.Message.Body" class="block text-gray-700 font-bold mb-2"></label>
+                <textarea 
+                    asp-for="@Model.Message.Body"
+                    class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                ></textarea>
             </div>
             <div>
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -49,6 +40,17 @@
             </div>
         </div>
     </form>
+</div>
+
+<div class="w-1/2 mx-auto pt-6">
+    <h3 class="mb-6 text-2xl font-bold text-center">Messages</h3>
+    @foreach (var message in Model.User.MessageUsers)
+    {
+        <div class="mb-4">
+            <h4 class="text-lg font-medium text-center">@message.Message?.Title</h4>
+            <p>@message.Message?.Body</p>
+        </div>
+    }
 </div>
 
 @section Scripts {

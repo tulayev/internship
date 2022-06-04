@@ -48,7 +48,7 @@ namespace Task5.Controllers
         {
             var user = _db.Users.
                 Include(u => u.MessageUsers).
-                ThenInclude(x => x.Message).
+                ThenInclude(mu => mu.Message).
                 FirstOrDefault(u => u.Name == name);
 
             if (user == null)
@@ -60,20 +60,36 @@ namespace Task5.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Send(SendVM model, [FromForm] string[] names)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Chat(SendVM model, [FromForm] string[] names)
         {
-            names = names.Distinct().ToArray();
+            var user = _db.Users.
+                Include(u => u.MessageUsers).
+                ThenInclude(mu => mu.Message).
+                FirstOrDefault(u => u.Id == model.User.Id);
 
-            foreach (string name in names)
+            if (names.Length > 0 && ModelState.IsValid)
             {
-                var recepient = _db.Users.FirstOrDefault(u => u.Name == name);
-                _db.MessageUser.Add(new MessageUser { User = recepient, Message = model.Message });
+                names = names.Distinct().ToArray();
+
+                foreach (string name in names)
+                {
+                    var recepient = _db.Users.FirstOrDefault(u => u.Name == name);
+
+                    if (recepient == null)
+                    {
+                        return NotFound();
+                    }
+
+                    _db.MessageUser.Add(new MessageUser { User = recepient, Message = model.Message });
+                }
+
+                _db.Messages.Add(model.Message);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Chat", new { name = user.Name });
             }
 
-            _db.Messages.Add(model.Message);
-            await _db.SaveChangesAsync();
-
-            return Ok();
+            return View(new SendVM { User = user });
         }
 
         #region API
