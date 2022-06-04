@@ -101,7 +101,7 @@
 
     const messageBox = document.getElementById('messageBox')
 
-    setInterval(async () => {
+    const fetchMessages = async() => {
         const urlString = window.location.href
         const url = new URL(urlString)
         const param = url.searchParams.get('name')
@@ -126,7 +126,13 @@
         } catch(e) {
             console.log(e.message)
         }
-    }, 5000)
+    }
+
+    fetchMessages()
+
+    setInterval(async () => {
+        fetchMessages()    
+    }, 2000)
 
 </script>
 
