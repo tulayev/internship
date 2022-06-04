@@ -1,1 +1,16 @@
-﻿
+﻿@model User
+
+<form asp-action="Index" asp-controller="Home" method="post">
+    <div class="w-1/2 mx-auto mt-4">
+        <div class="mb-4">
+            <label asp-for="@Model.Name" class="block text-gray-700 font-bold mb-2"></label>
+            <input asp-for="@Model.Name" class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Name..." />
+            <span asp-validation-for="@Model.Name" class="block text-red-600 text-sm"></span>
+        </div>
+        <div>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Submit
+            </button>
+        </div>
+    </div>
+</form>

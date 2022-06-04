@@ -1,0 +1,107 @@
+﻿@model SendVM
+
+<div class="mt-4">
+    <form asp-action="Send" asp-controller="Home" method="post">
+        <input asp-for="@Model.User.Id" type="hidden" />
+        <input asp-for="@Model.Message.From" value="@Model.User.Name" type="hidden" />
+        <div class="w-1/2 mx-auto">
+            <h2 class="text-4xl mb-4">Hello, <b>@Model.User.Name!</b></h2>
+            <div class="mb-4">
+                <div>
+                    <div id="names" class="flex flex-wrap mb-2"></div>
+                    <label for="search" class="block text-gray-700 font-bold mb-2">Recepient Name</label>
+                    <input 
+                        type="text" 
+                        id="search" 
+                        class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                    />
+                </div>
+                <div id="matchList"></div>
+            </div>
+            <div class="mb-4">
+                <label asp-for="@Model.Message.Title" class="block text-gray-700 font-bold mb-2"></label>
+                <input 
+                    asp-for="@Model.Message.Title" 
+                    type="text" 
+                    class="shadow appearance-none border rounded w-full mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                />
+                <span asp-validation-for="@Model.Message.Title" class="block text-red-600 text-sm"></span>
+            </div>
+            <div class="row">
+                <div class="col-6 m-auto">
+                    @foreach (var message in Model.User.MessageUsers)
+                    {
+                        <div class="mb-2">
+                            <div>
+                                <h5>@message.Message?.Title</h5>
+                            </div>
+                            <div>
+                                <div>@message.Message?.Body</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Send
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+
+<script>
+
+    const search = document.getElementById('search')
+    const matchList = document.getElementById('matchList')
+    const names = document.getElementById('names')
+
+    const searchNames = async searchText => {
+        const res = await fetch('/home/users')
+        const users = await res.json()
+
+        let matches = users.data.filter(u => {
+            const regex = new RegExp(`^${searchText}`, 'gi')
+            return u.name.match(regex)
+        })
+
+        if (searchText.length === 0) {
+            matches = []
+            matchList.innerHTML = ''
+        }
+
+        outputHtml(matches)
+    }
+
+    const outputHtml = (matches) => {
+        if (matches.length > 0) {
+            const html = matches.map(match => `
+                <p class="userNames cursor-pointer px-4 py-2 rounded-lg bg-green-500 text-white inline-block">${match.name}</p>
+            `).join('')
+
+            matchList.innerHTML = html
+
+            const userNames = document.querySelectorAll('.userNames')
+            addUnique(userNames)
+        }
+    }
+
+    const addUnique = (userNames) => {
+        userNames.forEach(i => {
+            i.addEventListener('click', (e) => {
+                const input = `<input type="text" name="names" value="${i.innerText}" readonly class="block w-1/6 mr-2 bg-blue-500 text-white text-center font-bold py-2 px-4 rounded" />`
+                names.innerHTML += input
+                search.value = ''
+                searchNames(search.value)
+            })
+        })
+    }
+
+    search.addEventListener('input', () => searchNames(search.value))
+
+</script>
+
+}

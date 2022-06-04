@@ -28,6 +28,11 @@ namespace Task5.Migrations
                     b.Property<string>("Body")
                         .HasColumnType("text");
 
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("character varying(255)")
@@ -80,13 +85,13 @@ namespace Task5.Migrations
             modelBuilder.Entity("Task5.Models.MessageUser", b =>
                 {
                     b.HasOne("Task5.Models.Message", "Message")
-                        .WithMany("MessageUser")
+                        .WithMany("MessageUsers")
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Task5.Models.User", "User")
-                        .WithMany("MessageUser")
+                        .WithMany("MessageUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

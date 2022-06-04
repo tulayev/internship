@@ -9,8 +9,8 @@ using Task5.Data;
 namespace Task5.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220603135456_Initial")]
-    partial class Initial
+    [Migration("20220604040102_Intial")]
+    partial class Intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,11 @@ namespace Task5.Migrations
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -82,13 +87,13 @@ namespace Task5.Migrations
             modelBuilder.Entity("Task5.Models.MessageUser", b =>
                 {
                     b.HasOne("Task5.Models.Message", "Message")
-                        .WithMany("MessageUser")
+                        .WithMany("MessageUsers")
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Task5.Models.User", "User")
-                        .WithMany("MessageUser")
+                        .WithMany("MessageUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -11,7 +11,7 @@ namespace Task5.Models
         public string Name { get; set; }
 
 #nullable enable
-        public ICollection<MessageUser>? MessageUser { get; set; }
+        public ICollection<MessageUser>? MessageUsers { get; set; }
 #nullable disable
     }
 }

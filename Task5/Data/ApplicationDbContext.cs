@@ -25,6 +25,7 @@ namespace Task5.Data
         private void MessageConfigure(EntityTypeBuilder<Message> builder)
         {
             builder.Property(p => p.Title).IsRequired().HasMaxLength(255);
+            builder.Property(p => p.From).IsRequired().HasMaxLength(255);
         }
         
         private void UserConfigure(EntityTypeBuilder<User> builder)
@@ -35,8 +36,8 @@ namespace Task5.Data
         private void MessageUserConfigure(EntityTypeBuilder<MessageUser> builder)
         {
             builder.ToTable("MessageUser").HasKey(mu => new { mu.Id });
-            builder.ToTable("MessageUser").HasOne(mu => mu.Message).WithMany(m => m.MessageUser).HasForeignKey(mu => mu.MessageId);
-            builder.ToTable("MessageUser").HasOne(mu => mu.User).WithMany(u => u.MessageUser).HasForeignKey(mu => mu.UserId);
+            builder.ToTable("MessageUser").HasOne(mu => mu.Message).WithMany(m => m.MessageUsers).HasForeignKey(mu => mu.MessageId);
+            builder.ToTable("MessageUser").HasOne(mu => mu.User).WithMany(u => u.MessageUsers).HasForeignKey(mu => mu.UserId);
         }
     }
 }
