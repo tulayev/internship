@@ -1,0 +1,86 @@
+﻿@page
+@model IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<!DOCTYPE html>
+<html lang="@System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake User Data Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.14.3/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+
+    <div class="container mx-auto">
+        <div class="flex flex-col">
+            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                    <div id="table" class="h-[600px] overflow-auto">
+                        <table class="min-w-full">
+                            <thead class="border-b">
+                                <tr>
+                                    <th scope="col" class="font-medium text-gray-900 px-6 py-4 text-left">
+                                        #
+                                    </th>
+                                    <th scope="col" class="font-medium text-gray-900 px-6 py-4 text-left">
+                                        @Localizer["UniqueId"]
+                                    </th>
+                                    <th scope="col" class="font-medium text-gray-900 px-6 py-4 text-left">
+                                        @Localizer["Name"]
+                                    </th>
+                                    <th scope="col" class="font-medium text-gray-900 px-6 py-4 text-left">
+                                        @Localizer["Address"]
+                                    </th>
+                                    <th scope="col" class="font-medium text-gray-900 px-6 py-4 text-left">
+                                        @Localizer["PhoneNumber"]
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <label for="errorOccuranceValue" class="block mb-2 text-sm font-medium text-gray-900">@Localizer["ErrorsOccurance"]</label>
+            <input 
+                id="errorOccuranceRange"
+                type="range" 
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                min="0"
+                max="10"
+                step="0.25"
+                value="0"
+            />
+            <input 
+                id="errorOccuranceValue"
+                type="text" 
+                class="mt-2 shadow appearance-none border rounded py-2 px-2 text-gray-700 focus:outline-none focus:shadow-outline"
+            />
+        </div>
+
+        <div class="flex justify-between mt-4">
+            <div>
+                <input 
+                    id="seedValue"
+                    type="text" 
+                    class="mt-2 shadow appearance-none border rounded py-2 px-2 text-gray-700 focus:outline-none focus:shadow-outline"
+                    required
+                />
+                <button type="button" id="seedBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-not-allowed">Seed</button>
+            </div>
+            <partial name="_LocaleSwitcherPartial" />
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.3/dist/js/uikit.min.js"></script>
+    <script src="~/js/script.js"></script>
+</body>
+</html>
